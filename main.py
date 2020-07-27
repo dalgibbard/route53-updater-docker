@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 from os import getenv
 from sys import exit
@@ -7,7 +7,6 @@ import requests
 import socket
 from datetime import datetime
 
-import botocore
 import botocore.session
 
 from iplookup import iplookup
@@ -63,7 +62,10 @@ def update_ip():
     logit("INFO", "IP Update Check Started")
     # Get current DNS IP
     ip = iplookup.iplookup
-    current_ip = ip(DNS_NAME)[0]
+    try:
+        current_ip = ip(DNS_NAME)[0]
+    except IndexError as err:
+        current_ip = "1.2.3.4"
     # get WAN IP
     r = requests.get(PUBLIC_IP_URL)
     public_ip = r.text.strip()

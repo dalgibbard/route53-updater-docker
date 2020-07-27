@@ -1,11 +1,9 @@
 # Route 53 updater for DDNS-like home network access.
 #
-FROM alpine:latest
-MAINTAINER Chris Barrett <chris@codesaru.com>
+FROM arm64v8/python:3.8-alpine
 
 RUN apk --update add py3-pip \
-	&& pip install awscli \
-        && pip install iplookup \
+	&& python3 -m pip install awscli iplookup boto boto3 botocore requests \
 	&& rm -rf /var/cache/apk/*
 
 RUN addgroup -S route53 \
@@ -14,4 +12,4 @@ USER route53:route53
 
 COPY main.py /
 
-CMD [ "/usr/bin/python3", "-u", "/main.py" ]
+CMD [ "/usr/local/bin/python3", "-u", "/main.py" ]
